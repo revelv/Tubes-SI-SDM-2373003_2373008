@@ -143,7 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <button type="submit">Login</button>
         </form>
         <div class="register-link">
-            Belum punya akun? <a href="register_employee.php">Daftar sebagai karyawan baru</a>
+            Belum punya akun? <a href="register_employee.php">Daftar sebagai calon karyawan</a>
         </div>
 
         <style>

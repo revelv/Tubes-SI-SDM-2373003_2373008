@@ -1,6 +1,6 @@
 <?php
-require_once 'process.php';
-require_once 'auth.php';
+require 'process.php';
+require 'auth.php';
 require 'admin_header.php';
 redirectIfNotLoggedIn();
 
@@ -150,16 +150,7 @@ $departments = getDepartments($conn);
 </head>
 
 <body>
-    <div class="container">
-        <div class="header">
-            <span>Employee Management System</span>
-            <div class="user-info">
-                <span style="color: white;">Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?></span>
-                <a href="add_employee.php" class="add-btn">Add Employee</a>
-                <a href="admin_approval.php" class="add-btn">Review Applications</a>
-                <a href="logout.php" class="logout-btn">Logout</a>
-            </div>
-        </div> <!-- Tutup div header di sini -->
+
 
         <div class="content">
             <form method="GET" class="filter-form">
