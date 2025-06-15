@@ -9,6 +9,8 @@ if (!isset($_GET['id'])) {
 $employee_id = intval($_GET['id']);
 $employee = null;
 $departments = getDepartments($conn);
+$job_positions = getJobPositions($conn);
+
 
 // Fetch employee data
 $stmt = $conn->prepare("SELECT * FROM employees WHERE id = ?");
@@ -28,10 +30,10 @@ $error_message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = $_POST['name'] ?? '';
-    $position = $_POST['position'] ?? '';
+    $position_id = $_POST['position_id'] ?? ''; 
     $email = $_POST['email'] ?? '';
     $department_id = $_POST['department_id'] ?? 0;
-    $current_image = $employee['image_path'];
+    $current_image = $employee['image_path'] ?? '';
     $new_image_path = $current_image;
 
     // Handle delete image request
@@ -45,6 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
+    // Handle new image upload
     if (isset($_FILES['employee_image']) && $_FILES['employee_image']['error'] === UPLOAD_ERR_OK) {
         $file_tmp_path = $_FILES['employee_image']['tmp_name'];
         $file_name = $_FILES['employee_image']['name'];
@@ -64,17 +67,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    if (!empty($name) && !empty($position) && $department_id > 0) {
-        $stmt = $conn->prepare("UPDATE employees SET name = ?, position = ?, email = ?, department_id = ?, image_path = ? WHERE id = ?");
-        $stmt->bind_param("sssssi", $name, $position, $email, $department_id, $new_image_path, $employee_id);
+    // Validate required fields
+    if (!empty($name) && !empty($position_id) && $department_id > 0) {
+        $stmt = $conn->prepare("UPDATE employees SET name = ?, position_id = ?, email = ?, department_id = ?, image_path = ? WHERE id = ?");
+        $stmt->bind_param("sssssi", $name, $position_id, $email, $department_id, $new_image_path, $employee_id);
 
         if ($stmt->execute()) {
             $success_message = "Employee updated successfully!";
             // Update local employee data
             $employee['name'] = $name;
-            $employee['position'] = $position;
+            $employee['position_id'] = $position_id;
             $employee['email'] = $email;
             $employee['department_id'] = $department_id;
+            $employee['image_path'] = $new_image_path;
         } else {
             $error_message = "Error updating employee: " . $stmt->error;
         }
@@ -194,20 +199,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
         <div class="form-container">
             <?php if ($success_message): ?>
-                <div class="success"><?php echo $success_message; ?></div>
+                <div class="success"><?php echo htmlspecialchars($success_message); ?></div>
             <?php endif; ?>
             <?php if ($error_message): ?>
-                <div class="error"><?php echo $error_message; ?></div>
+                <div class="error"><?php echo htmlspecialchars($error_message); ?></div>
             <?php endif; ?>
 
             <form method="POST" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="name">Name</label>
-                    <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($employee['name']); ?>" required>
+                    <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($employee['name'] ?? ''); ?>" required>
                 </div>
                 <div class="form-group">
-                    <label for="position">Position</label>
-                    <input type="text" id="position" name="position" value="<?php echo htmlspecialchars($employee['position']); ?>" required>
+                    <label for="position_id">Position</label>
+                    <select id="position_id" name="position_id" required>
+                        <option value="">Select Position</option>
+                        <?php foreach ($job_positions as $id => $name): ?>
+                            <option value="<?php echo $id; ?>" <?php echo ($employee['position_id'] ?? 0) == $id ? 'selected' : ''; ?>>
+                                <?php echo htmlspecialchars($name); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="email">Email (optional)</label>
@@ -218,7 +230,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <select id="department_id" name="department_id" required>
                         <option value="">Select Department</option>
                         <?php foreach ($departments as $id => $name): ?>
-                            <option value="<?php echo $id; ?>" <?php echo $employee['department_id'] == $id ? 'selected' : ''; ?>>
+                            <option value="<?php echo $id; ?>" <?php echo ($employee['department_id'] ?? 0) == $id ? 'selected' : ''; ?>>
                                 <?php echo htmlspecialchars($name); ?>
                             </option>
                         <?php endforeach; ?>

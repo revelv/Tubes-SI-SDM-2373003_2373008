@@ -9,7 +9,7 @@ $error_message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = $_POST['name'] ?? '';
-    $position = $_POST['position'] ?? '';
+    $position_id = $_POST['position_id'] ?? '';
     $email = $_POST['email'] ?? '';
     $department_id = $_POST['department_id'] ?? 0;
 
@@ -32,8 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (!empty($name) && !empty($position) && $department_id > 0) {
-        $stmt = $conn->prepare("INSERT INTO employees (department_id, name, position, email, image_path) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("issss", $department_id, $name, $position, $email, $image_path);
+        $stmt = $conn->prepare("INSERT INTO employees (department_id, position_id, name,  email, image_path) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("issss", $department_id, $position_id, $name,  $email, $image_path);
 
         if ($stmt->execute()) {
             $success_message = "Employee added successfully!";

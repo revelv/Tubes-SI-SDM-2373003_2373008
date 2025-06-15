@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jun 14, 2025 at 02:15 PM
+-- Generation Time: Jun 15, 2025 at 05:12 AM
 -- Server version: 8.4.3
 -- PHP Version: 8.3.16
 
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `departments` (
   `id` int NOT NULL,
-  `name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
+  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -56,33 +56,29 @@ CREATE TABLE `employees` (
   `id` int NOT NULL,
   `department_id` int DEFAULT NULL,
   `position_id` int NOT NULL,
-  `name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `email` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `image_path` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `created_by` int DEFAULT NULL,
-  `applied_at` datetime DEFAULT CURRENT_TIMESTAMP,
-  `processed_at` datetime DEFAULT NULL,
-  `processed_by` int DEFAULT NULL,
-  `admin_notes` text COLLATE utf8mb4_general_ci
+  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `image_path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `applied_at` datetime DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `employees`
 --
 
-INSERT INTO `employees` (`id`, `department_id`, `position_id`, `name`, `email`, `image_path`, `created_by`, `applied_at`, `processed_at`, `processed_by`, `admin_notes`) VALUES
-(1, 6, 0, 'Balmond Saputra', 'mon_putra15@gmail.com', NULL, NULL, '2025-06-14 18:17:46', NULL, NULL, NULL),
-(2, 3, 0, 'Guntur Surapati', NULL, NULL, NULL, '2025-06-14 18:17:46', NULL, NULL, NULL),
-(4, 4, 0, 'Rivaldi Tazz', 'bobitan@gmail.exe', NULL, NULL, '2025-06-14 18:17:46', NULL, NULL, NULL),
-(5, 5, 0, 'TONY STARKS', 'tonystark@stark.com', '', NULL, '2025-06-14 18:17:46', NULL, NULL, NULL),
-(6, 7, 0, 'かのじょ', NULL, NULL, NULL, '2025-06-14 18:17:46', NULL, NULL, NULL),
-(7, 7, 0, 'ベレウェブ', 'brew-brew-patapim@gmail.com', NULL, NULL, '2025-06-14 18:17:46', NULL, NULL, NULL),
-(8, 6, 0, '英雄緑色', NULL, NULL, NULL, '2025-06-14 18:17:46', NULL, NULL, NULL),
-(9, 3, 0, 'Artonia Pendragon', NULL, NULL, NULL, '2025-06-14 18:17:46', NULL, NULL, NULL),
-(10, 8, 0, 'Brandon Victorz', 'boneofmysword@gmail.com', NULL, NULL, '2025-06-14 18:17:46', NULL, NULL, NULL),
-(11, 4, 0, 'Dokter Aneh', 'arkamm.tusk@gmail.com', NULL, NULL, '2025-06-14 18:17:46', NULL, NULL, NULL),
-(12, 8, 0, 'Janggar Pranew', '2373003@maranatha.ac.id', NULL, NULL, '2025-06-14 18:17:46', NULL, NULL, NULL),
-(17, 6, 0, 'Asep Balon', 'balon_meledak1748@gmail.com', '', NULL, '2025-06-14 18:17:46', NULL, NULL, NULL);
+INSERT INTO `employees` (`id`, `department_id`, `position_id`, `name`, `email`, `image_path`, `applied_at`) VALUES
+(1, 6, 8, 'Balmond Saputra', 'mon_putra15@gmail.com', NULL, '2025-06-15 11:23:50'),
+(2, 3, 6, 'Guntur Surapati', NULL, NULL, '2025-06-15 11:23:50'),
+(4, 4, 7, 'Rivaldi Tazz', 'bobitan@gmail.exe', NULL, '2025-06-15 11:23:50'),
+(5, 5, 9, 'TONY STARKS', 'tonystark@stark.com', '', '2025-06-15 11:23:50'),
+(6, 7, 10, 'かのじょ', NULL, NULL, '2025-06-15 11:23:50'),
+(7, 7, 11, 'ベレウェブ', 'brew-brew-patapim@gmail.com', NULL, '2025-06-15 11:23:50'),
+(8, 6, 8, '英雄緑色', NULL, NULL, '2025-06-15 11:23:50'),
+(9, 3, 5, 'Artonia Pendragon', NULL, NULL, '2025-06-15 11:23:50'),
+(10, 3, 6, 'Brandon Victorz', 'boneofmysword@gmail.com', '', '2025-06-15 11:23:50'),
+(11, 4, 7, 'Dokter Aneh', 'arkamm.tusk@gmail.com', NULL, '2025-06-15 11:23:50'),
+(12, 8, 13, 'Janggar Pranew', '2373003@maranatha.ac.id', NULL, '2025-06-15 11:23:50'),
+(17, 6, 8, 'Asep Balon', 'balon_meledak1748@gmail.com', '', '2025-06-15 11:23:50');
 
 -- --------------------------------------------------------
 
@@ -93,7 +89,7 @@ INSERT INTO `employees` (`id`, `department_id`, `position_id`, `name`, `email`, 
 CREATE TABLE `job_positions` (
   `position_id` int NOT NULL,
   `department_id` int NOT NULL,
-  `title` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
+  `title` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -125,15 +121,15 @@ INSERT INTO `job_positions` (`position_id`, `department_id`, `title`) VALUES
 
 CREATE TABLE `recruitment` (
   `id` int NOT NULL,
-  `name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `email` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `phone` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `phone` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `position_id` int NOT NULL,
-  `cv_path` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `photo_path` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `cv_path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `photo_path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `application_date` datetime DEFAULT CURRENT_TIMESTAMP,
-  `status` enum('pending','reviewed','accepted','rejected') COLLATE utf8mb4_general_ci DEFAULT 'pending',
-  `notes` text COLLATE utf8mb4_general_ci
+  `status` enum('pending','reviewed','accepted','rejected') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT 'pending',
+  `notes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -151,9 +147,9 @@ INSERT INTO `recruitment` (`id`, `name`, `email`, `phone`, `position_id`, `cv_pa
 
 CREATE TABLE `users` (
   `id` int NOT NULL,
-  `username` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
-  `password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `role` enum('admin','employee') COLLATE utf8mb4_general_ci NOT NULL,
+  `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `role` enum('admin','employee') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `employee_id` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -179,7 +175,8 @@ ALTER TABLE `departments`
 --
 ALTER TABLE `employees`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `FK_department_id` (`department_id`);
+  ADD KEY `FK_department_id` (`department_id`),
+  ADD KEY `FK_position_id` (`position_id`);
 
 --
 -- Indexes for table `job_positions`
@@ -245,13 +242,14 @@ ALTER TABLE `users`
 -- Constraints for table `employees`
 --
 ALTER TABLE `employees`
-  ADD CONSTRAINT `FK_department_id` FOREIGN KEY (`department_id`) REFERENCES `departments` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_department_id` FOREIGN KEY (`department_id`) REFERENCES `departments` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `FK_position_id` FOREIGN KEY (`position_id`) REFERENCES `job_positions` (`position_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Constraints for table `job_positions`
 --
 ALTER TABLE `job_positions`
-  ADD CONSTRAINT `job_positions_ibfk_1` FOREIGN KEY (`department_id`) REFERENCES `departments` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `job_positions_ibfk_1` FOREIGN KEY (`department_id`) REFERENCES `departments` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Constraints for table `recruitment`

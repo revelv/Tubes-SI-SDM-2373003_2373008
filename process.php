@@ -25,6 +25,16 @@ function getDepartments($conn) {
     return $departments;
 }
 
+function getJobPositions($conn) {
+    $positions = [];
+    $result = $conn->query("SELECT position_id, title FROM job_positions ORDER BY title");
+    if ($result) {
+        while ($row = $result->fetch_assoc()) {
+            $positions[$row['position_id']] = $row['title'];
+        }
+    }
+    return $positions;
+}
 
 if (!file_exists(UPLOAD_DIR)) {
     mkdir(UPLOAD_DIR, 0777, true);

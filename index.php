@@ -10,9 +10,10 @@ $department_filter = isset($_GET['department']) ? intval($_GET['department']) : 
 
 // Build SQL query
 $sql = "
-    SELECT e.*, d.name AS department_name 
+    SELECT e.*, d.name AS department_name, jp.title AS position_title
     FROM employees e
     JOIN departments d ON e.department_id = d.id
+    JOIN job_positions jp ON e.position_id = jp.position_id
 ";
 
 if ($department_filter > 0) {
@@ -180,7 +181,7 @@ $departments = getDepartments($conn);
                     <?php foreach ($employees as $employee): ?>
                         <tr>
                             <td><?php echo htmlspecialchars($employee['name']); ?></td>
-                            <td><?php echo htmlspecialchars($employee['position']); ?></td>
+                            <td><?php echo htmlspecialchars($employee['position_title']); ?></td>
                             <td><?php echo htmlspecialchars($employee['department_name']); ?></td>
                             <td><?php echo htmlspecialchars($employee['email'] ?? '-'); ?></td>
                             <td>

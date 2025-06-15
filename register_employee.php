@@ -62,9 +62,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Get all positions grouped by department
-$positions = [];
+$position_id = [];
 $result = $conn->query("
-    SELECT p.id, p.title, d.name AS department 
+    SELECT p.position_id AS id, p.title, d.name AS department 
     FROM job_positions p
     JOIN departments d ON p.department_id = d.id
     ORDER BY d.name, p.title
