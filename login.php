@@ -163,11 +163,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         </style>
 
-        <div class="admin-info">
-            <strong>Login sebagai Admin:</strong>
-            <div>Username: <code>admin</code></div>
-            <div>Password: <code>admin</code></div>
-        </div>
     </div>
 </body>
 

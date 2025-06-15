@@ -43,6 +43,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new Exception("Execute failed: " . $stmt->error);
             }
 
+
+
             // Only create employee if accepted
             if ($action === 'accept') {
                 // Get complete recruitment data with position info
@@ -58,24 +60,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $app = $stmt->get_result()->fetch_assoc();
 
-                if ($app) {
-                    // Validasi data penting
-                    if (empty($app['email']) || empty($app['name'])) {
-                        throw new Exception("Data email atau nama tidak valid");
-                    }
 
-                    // Insert into employees
+
+                if ($app) {
+                    // Gunakan path gambar yang baru diupload jika ada
+                    $image_path = isset($app['image_path']) ? $app['image_path'] : (!empty($app['image_path']) ? $app['image_path'] : null);
+
                     $stmt = $conn->prepare("INSERT INTO employees 
-                      (department_id, position_id, name, email, image_path, created_by) 
-                      VALUES (?, ?, ?, ?, ?, ?)");
+                              (department_id, position_id, name, email, image_path, created_by) 
+                              VALUES (?, ?, ?, ?, ?, ?)");
                     $stmt->bind_param(
-                        "iisssi",  // Perhatikan urutan dan tipe data:
-                        $app['department_id'],  // integer (boleh NULL)
-                        $app['position_id'],    // integer
-                        $app['name'],           // string
-                        $app['email'],          // string (boleh NULL)
-                        $app['image_path'],     // string (boleh NULL)
-                        $_SESSION['user_id']    // integer
+                        "iisssi",
+                        $app['department_id'],
+                        $app['position_id'],
+                        $app['name'],
+                        $app['email'],
+                        $image_path,
+                        $_SESSION['user_id']
                     );
 
                     if (!$stmt->execute()) {
@@ -224,7 +225,7 @@ $applications = $result->fetch_all(MYSQLI_ASSOC);
 
                 <!-- Action buttons section -->
                 <?php if ($app['status'] == 'pending'): ?>
-                    <form method="POST" class="action-form">
+                    <form method="POST" class="action-form" enctype="multipart/form-data">
                         <input type="hidden" name="recruitment_id" value="<?= $app['id'] ?>">
                         <textarea name="notes" placeholder="Catatan admin (opsional)"></textarea>
                         <button type="submit" name="action" value="review" class="action-btn review-btn">Tandai Ditinjau</button>
@@ -233,7 +234,7 @@ $applications = $result->fetch_all(MYSQLI_ASSOC);
                     </form>
 
                 <?php elseif ($app['status'] == 'reviewed'): ?>
-                    <form method="POST" class="action-form">
+                    <form method="POST" class="action-form" enctype="multipart/form-data">
                         <input type="hidden" name="recruitment_id" value="<?= $app['id'] ?>">
                         <textarea name="notes" placeholder="Catatan admin (opsional)"><?=
                                                                                         !empty($app['admin_notes']) ? htmlspecialchars($app['admin_notes']) : ''
