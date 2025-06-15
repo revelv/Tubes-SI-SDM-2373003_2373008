@@ -48,10 +48,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Only create employee if accepted
             if ($action === 'accept') {
                 // Get complete recruitment data with position info
-                $stmt = $conn->prepare("SELECT r.*, jp.title as position_title, jp.department_id
-                                      FROM recruitment r
-                                      JOIN job_positions jp ON r.position_id = jp.position_id
-                                      WHERE r.id = ?");
+                $stmt = $conn->prepare("SELECT r.id, r.name, r.email, r.position_id, r.photo_path, jp.title as position_title, jp.department_id
+                        FROM recruitment r
+                        JOIN job_positions jp ON r.position_id = jp.position_id
+                        WHERE r.id = ?");
                 $stmt->bind_param("i", $recruitment_id);
 
                 if (!$stmt->execute()) {
@@ -60,12 +60,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $app = $stmt->get_result()->fetch_assoc();
 
-
+                error_log("Full app data: " . print_r($app, true));
 
                 if ($app) {
                     // Gunakan path gambar yang baru diupload jika ada
-                    $image_path = isset($app['image_path']) ? $app['image_path'] : (!empty($app['image_path']) ? $app['image_path'] : null);
-
+                    $image_path = !empty($app['photo_path']) ? $app['photo_path'] : null;
+                    error_log("photo_path: " . var_export($app['photo_path'], true));
+                    error_log("image_path yang akan disimpan: " . var_export($image_path, true));
                     $stmt = $conn->prepare("INSERT INTO employees 
                               (department_id, position_id, name, email, image_path, created_by) 
                               VALUES (?, ?, ?, ?, ?, ?)");
