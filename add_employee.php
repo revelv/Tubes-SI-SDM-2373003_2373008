@@ -72,19 +72,10 @@ $job_positions = getJobPositions($conn);
         }
 
         .container {
-            max-width: 600px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
-        .header {
-            background-color: #714B67;
-            color: white;
-            padding: 15px 20px;
-            border-radius: 3px 3px 0 0;
-            font-size: 24px;
-            font-weight: 300;
-            margin-bottom: 20px;
-        }
 
         .form-container {
             background-color: white;
@@ -147,12 +138,15 @@ $job_positions = getJobPositions($conn);
         .back-link:hover {
             text-decoration: underline;
         }
+        .judul{
+            padding: 10px;
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <div class="header">
+        <div class="judul">
             Add New Employee
         </div>
         <div class="form-container">

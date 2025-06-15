@@ -54,18 +54,6 @@ $departments = getDepartments($conn);
             margin: 0 auto;
         }
 
-        .header {
-            background-color: #714B67;
-            color: white;
-            padding: 15px 20px;
-            border-radius: 3px 3px 0 0;
-            font-size: 24px;
-            font-weight: 300;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
         .content {
             background-color: white;
             border-radius: 0 0 3px 3px;

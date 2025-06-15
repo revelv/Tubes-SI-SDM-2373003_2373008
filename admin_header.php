@@ -1,15 +1,14 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-        <style>
+    <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
+            margin: 0; 
             background-color: #f5f6f7;
             color: #333;
         }
@@ -24,7 +23,7 @@
             color: white;
             padding: 15px 20px;
             border-radius: 3px 3px 0 0;
-            font-size: 24px;
+            font-size: 15px;
             font-weight: 300;
             display: flex;
             justify-content: space-between;
@@ -87,10 +86,10 @@
         }
 
         .add-btn {
-            background-color:rgb(135, 197, 212);
+            background-color: rgb(135, 197, 212);
             color: white;
             text-decoration: none;
-            padding: 8px 15px;
+            padding: 8px 12px;
             border-radius: 3px;
         }
 
@@ -103,7 +102,7 @@
         .logout-btn {
             background-color: #e74c3c;
             color: white;
-            padding: 8px 15px;
+            padding: 8px 12px;
             border-radius: 3px;
             text-decoration: none;
             font-size: 14px;
@@ -112,18 +111,33 @@
         .logout-btn:hover {
             background-color: #c0392b;
         }
+
+        .back-btn {
+            display: inline-block;
+            padding: 8px 12px;
+            background-color: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 200;
+        }
     </style>
 </head>
+
 <body>
-        <div class="container">
+    <div class="container">
         <div class="header">
-            <span>Employee Management System</span>
+            <span>Styrk Industries</span>
             <div class="user-info">
                 <span style="color: white;">Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?></span>
+                <div>
+                    <a href="login.php" class="back-btn">&larr; Back</a>
+                </div>
                 <a href="add_employee.php" class="add-btn">Add Employee</a>
                 <a href="admin_approval.php" class="add-btn">Review Applications</a>
                 <a href="logout.php" class="logout-btn">Logout</a>
             </div>
         </div>
 </body>
+
 </html>

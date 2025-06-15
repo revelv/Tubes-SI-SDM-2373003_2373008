@@ -112,15 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin: 0 auto;
         }
 
-        .header {
-            background-color: #714B67;
-            color: white;
-            padding: 15px 20px;
-            border-radius: 3px 3px 0 0;
-            font-size: 24px;
-            font-weight: 300;
-            margin-bottom: 20px;
-        }
+
 
         .form-container {
             background-color: white;
