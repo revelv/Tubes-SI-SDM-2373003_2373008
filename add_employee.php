@@ -31,14 +31,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    if (!empty($name) && !empty($position) && $department_id > 0) {
+    if (!empty($name) && ($position_id) && $department_id > 0) {
         $stmt = $conn->prepare("INSERT INTO employees (department_id, position_id, name,  email, image_path) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("issss", $department_id, $position_id, $name,  $email, $image_path);
+        $stmt->bind_param("iisss", $department_id, $position_id, $name,  $email, $image_path);
 
         if ($stmt->execute()) {
             $success_message = "Employee added successfully!";
             // Clear form on success
-            $name = $position = $email = '';
+            $name  = $email = '';
+            $position_id = 0;
             $department_id = 0;
         } else {
             $error_message = "Error adding employee: " . $stmt->error;
@@ -51,6 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $departments = getDepartments($conn);
+$job_positions = getJobPositions($conn);
 ?>
 
 <!DOCTYPE html>
@@ -167,8 +169,15 @@ $departments = getDepartments($conn);
                     <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($name ?? ''); ?>" required>
                 </div>
                 <div class="form-group">
-                    <label for="position">Position</label>
-                    <input type="text" id="position" name="position" value="<?php echo htmlspecialchars($position ?? ''); ?>" required>
+                    <label for="position_id">Position</label>
+                    <select id="position_id" name="position_id" required>
+                        <option value="">Select Position</option>
+                        <?php foreach ($job_positions as $id => $name): ?>
+                            <option value="<?php echo $id; ?>" <?php echo ($position_id ?? 0) == $id ? 'selected' : ''; ?>>
+                                <?php echo htmlspecialchars($name); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="email">Email (optional)</label>
