@@ -1,7 +1,5 @@
 <?php
-require_once 'auth.php';
-require 'header.php';
-redirectIfNotAdmin();
+
 ?>
 
 <!DOCTYPE html>
