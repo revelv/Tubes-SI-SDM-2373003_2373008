@@ -1,5 +1,8 @@
 <?php
-
+require 'process.php';
+require 'auth.php';
+include 'admin_header.php';
+redirectIfNotLoggedIn();
 ?>
 
 <!DOCTYPE html>
@@ -11,39 +14,15 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 20px;
+            margin-top: 20px;
             background-color: #f5f6f8;
             color: #333;
         }
         .container {
-            max-width: 1200px;
+            padding: 20px;
             margin: 0 auto;
         }
-        .sidebar {
-            float: left;
-            width: 250px;
-            background: #2c3e50;
-            color: white;
-            padding: 20px;
-            height: 100vh;
-            position: fixed;
-        }
-        .main-content {
-            margin-left: 290px;
-        }
-        .nav-menu {
-            list-style: none;
-            padding: 0;
-        }
-        .nav-menu li {
-            padding: 10px 0;
-            border-bottom: 1px solid #34495e;
-        }
-        .nav-menu li a {
-            color: white;
-            text-decoration: none;
-        }
+      
         .filter-section {
             background: white;
             border-radius: 5px;
@@ -95,17 +74,7 @@
 </head>
 <body>
     <div class="container">
-        <div class="sidebar">
-            <h2>Time Off</h2>
-            <ul class="nav-menu">
-                <li><a href="#">My Time</a></li>
-                <li><a href="#">Overview</a></li>
-                <li><a href="#">Management</a></li>
-                <li><a href="#">Reporting</a></li>
-                <li><a href="#">Configuration</a></li>
-            </ul>
-        </div>
-
+       
         <div class="main-content">
             <h1>Time Off Management</h1>
             

@@ -1,7 +1,10 @@
 <?php
-// appraisals.php
-// Database connection and other PHP logic would go here
+require 'process.php';
+require 'auth.php';
+include 'admin_header.php';
+redirectIfNotLoggedIn();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -12,7 +15,7 @@
     <style>
         body {
             font-family: 'Roboto', Arial, sans-serif;
-            margin: 0;
+            margin-top: 70px;
             padding: 0;
             background-color: #f5f5f5;
             color: #333;
@@ -24,14 +27,14 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             border-radius: 3px;
         }
-        .header {
+        .judul {
             padding: 15px 20px;
             border-bottom: 1px solid #e2e2e2;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .header h1 {
+        .judul h1 {
             margin: 0;
             font-size: 18px;
             font-weight: 500;
@@ -132,9 +135,139 @@
 </head>
 <body>
     <div class="container">
-        <div class="header">
+        <div class="judul">
             <h1>Appraisals</h1>
         </div>
         
         <div class="filters">
-           
+            <div class="filter-group">
+                <h3>DEPARTMENT</h3>
+                <div class="filter-options">
+                    <label class="filter-option">
+                        <input type="radio" name="department" checked> All
+                    </label>
+                    <label class="filter-option">
+                        <input type="radio" name="department"> Operational
+                    </label>
+                </div>
+            </div>
+            
+            <div class="filter-group">
+                <h3>STATUS</h3>
+                <div class="filter-options">
+                    <label class="filter-option">
+                        <input type="radio" name="status" checked> All
+                    </label>
+                    <label class="filter-option">
+                        <input type="radio" name="status"> To Confirm
+                    </label>
+                    <label class="filter-option">
+                        <input type="radio" name="status"> Confirmed
+                    </label>
+                    <label class="filter-option">
+                        <input type="radio" name="status"> Done
+                    </label>
+                    <label class="filter-option">
+                        <input type="radio" name="status"> Cancelled
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="appraisal-list">
+            <!-- Sammy Riki -->
+            <div class="appraisal-item">
+                <div class="employee-name">Sammy Riki <span class="status-tag status-confirmed">Confirmed</span></div>
+                <div class="department">Operational / Information Technology Research and Development</div>
+                <div class="date">08/05/2025</div>
+            </div>
+            
+            <!-- Slank Ganjar -->
+            <div class="appraisal-item">
+                <div class="employee-name">Slank Ganjar <span class="status-tag status-to-confirm">To Confirm</span></div>
+                <div class="department">Operational / Production</div>
+                <div class="date">06/23/2025</div>
+                <div class="meeting">Meeting: 05/28/2025</div>
+            </div>
+            
+            <!-- Balmond Saputra -->
+            <div class="appraisal-item">
+                <div class="employee-name">Balmond Saputra <span class="status-tag status-done">Done</span></div>
+                <div class="department">Operational / Production</div>
+                <div class="date">06/23/2025</div>
+                <div class="meeting">Meeting: 05/26/2025</div>
+            </div>
+            
+            <!-- Ken Surono -->
+            <div class="appraisal-item">
+                <div class="employee-name">Ken Surono <span class="status-tag status-cancelled">Cancelled</span></div>
+                <div class="department">Operational / Information Technology Research and Development</div>
+                <div class="date">06/23/2025</div>
+            </div>
+            
+            <!-- Asep Balon -->
+            <div class="appraisal-item">
+                <div class="employee-name">Asep Balon <span class="status-tag status-confirmed">Confirmed</span></div>
+                <div class="department">Operational / Production</div>
+                <div class="date">06/23/2025</div>
+                <div class="meeting">Meeting: 05/26/2025</div>
+            </div>
+            
+            <!-- Mark ZuGrebeg -->
+            <div class="appraisal-item">
+                <div class="employee-name">Mark ZuGrebeg <span class="status-tag status-to-confirm">To Confirm</span></div>
+                <div class="department">Operational / Information Technology Research and Development</div>
+                <div class="date">06/23/2025</div>
+            </div>
+            
+            <!-- Kim Sa My -->
+            <div class="appraisal-item">
+                <div class="employee-name">Kim Sa My <span class="status-tag status-confirmed">Confirmed</span></div>
+                <div class="department">Operational / Human Resource Development</div>
+                <div class="date">06/23/2025</div>
+                <div class="meeting">Meeting: 05/27/2025</div>
+            </div>
+            
+            <!-- Meng -->
+            <div class="appraisal-item">
+                <div class="employee-name">Meng <span class="status-tag status-done">Done</span></div>
+                <div class="department">Operational / Human Resource Development</div>
+                <div class="date">06/23/2025</div>
+                <div class="meeting">Meeting: 05/27/2025</div>
+            </div>
+            
+            <!-- Sai -->
+            <div class="appraisal-item">
+                <div class="employee-name">Sai <span class="status-tag status-to-confirm">To Confirm</span></div>
+                <div class="department">Operational / Supply Chain and Logs</div>
+                <div class="date">06/23/2025</div>
+                <div class="meeting">Meeting: 05/29/2025</div>
+            </div>
+            
+            <!-- Zhang -->
+            <div class="appraisal-item">
+                <div class="employee-name">Zhang <span class="status-tag status-confirmed">Confirmed</span></div>
+                <div class="department">Operational / Marketing</div>
+                <div class="date">06/23/2025</div>
+                <div class="meeting">Meeting: 05/27/2025</div>
+            </div>
+            
+            <!-- Xin -->
+            <div class="appraisal-item">
+                <div class="employee-name">Xin <span class="status-tag status-done">Done</span></div>
+                <div class="department">Operational / Information Technology Research and Development</div>
+                <div class="date">06/23/2025</div>
+                <div class="meeting">Meeting: 05/27/2025</div>
+            </div>
+            
+            <!-- Yang -->
+            <div class="appraisal-item">
+                <div class="employee-name">Yang <span class="status-tag status-confirmed">Confirmed</span></div>
+                <div class="department">Operational / Human Resource Development</div>
+                <div class="date">06/23/2025</div>
+                <div class="meeting">Meeting: 05/27/2025</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

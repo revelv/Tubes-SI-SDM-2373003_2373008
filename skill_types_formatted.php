@@ -180,6 +180,64 @@ if (isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['id'])
     exit();
 }
 
+function updateSkill($pdo, $id, $data)
+{
+    try {
+        $stmt = $pdo->prepare("UPDATE skills SET nama_skill = ?, jenis_skill = ?, deskripsi = ? WHERE id = ?");
+        $success = $stmt->execute([
+            htmlspecialchars($data['nama_skill']),
+            htmlspecialchars($data['jenis_skill']),
+            htmlspecialchars($data['deskripsi']),
+            $id
+        ]);
+
+        if (!$success) {
+            error_log("Failed to update skill: " . implode(", ", $stmt->errorInfo()));
+            return false;
+        }
+        return true;
+    } catch (PDOException $e) {
+        error_log("Database error updating skill: " . $e->getMessage());
+        return false;
+    }
+}
+
+function deleteSkill($pdo, $id)
+{
+    try {
+        // First delete any employee skills associated with this skill
+        $pdo->beginTransaction();
+
+        $stmt = $pdo->prepare("DELETE FROM employee_skills WHERE skill_id = ?");
+        $stmt->execute([$id]);
+
+        $stmt = $pdo->prepare("DELETE FROM skills WHERE id = ?");
+        $stmt->execute([$id]);
+
+        $pdo->commit();
+        return true;
+    } catch (PDOException $e) {
+        $pdo->rollBack();
+        error_log("Database error deleting skill: " . $e->getMessage());
+        return false;
+    }
+}
+
+// Add this with your other POST handlers
+if (isset($_POST['update_skill'])) {
+    if (updateSkill($pdo, $_POST['id'], $_POST)) {
+        $_SESSION['success_message'] = "Skill updated successfully!";
+    } else {
+        $_SESSION['error_message'] = "Failed to update skill.";
+    }
+} elseif (isset($_POST['delete_skill'])) {
+    if (deleteSkill($pdo, $_POST['id'])) {
+        $_SESSION['success_message'] = "Skill deleted successfully!";
+    } else {
+        $_SESSION['error_message'] = "Failed to delete skill.";
+    }
+}
+
 // Get all data
 $skills = getAllSkills($pdo);
 $employees = getEmployees($pdo);
@@ -477,6 +535,121 @@ $filteredSkills = $selectedEmployee ? getEmployeeSkills($pdo, $selectedEmployee)
                 grid-template-columns: repeat(3, 1fr);
             }
         }
+
+        /* Skill Card Enhancements */
+        .skill-card {
+            position: relative;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .skill-actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 5px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .skill-card:hover .skill-actions {
+            opacity: 1;
+        }
+
+        .action-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+            color: white;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .edit-btn {
+            background-color: #3498db;
+        }
+
+        .delete-btn {
+            background-color: #e74c3c;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #7f8c8d;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
     </style>
     <script>
         function showTab(tabId) {
@@ -569,18 +742,78 @@ $filteredSkills = $selectedEmployee ? getEmployeeSkills($pdo, $selectedEmployee)
                 <?php if (empty($skills)): ?>
                     <p>No skills found in database.</p>
                 <?php else: ?>
-                    <?php foreach ($skills as $skill): ?>
-                        <div class="skill-card">
-                            <div class="skill-name"><?php echo htmlspecialchars($skill['nama_skill']); ?></div>
-                            <div class="skill-type <?php echo $skill['jenis_skill']; ?>">
-                                <?php echo ucfirst(str_replace('_', ' ', $skill['jenis_skill'])); ?>
+                    <div class="skills-grid">
+                        <?php foreach ($skills as $skill): ?>
+                            <div class="skill-card">
+                                <div class="skill-actions">
+                                    <button class="action-btn edit-btn" onclick="openEditModal(<?php echo $skill['id']; ?>, '<?php echo htmlspecialchars($skill['nama_skill'], ENT_QUOTES); ?>', '<?php echo $skill['jenis_skill']; ?>', `<?php echo htmlspecialchars($skill['deskripsi'], ENT_QUOTES); ?>`)">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-btn delete-btn" onclick="confirmDeleteSkill(<?php echo $skill['id']; ?>)">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                                <div class="skill-name"><?php echo htmlspecialchars($skill['nama_skill']); ?></div>
+                                <div class="skill-type <?php echo $skill['jenis_skill']; ?>">
+                                    <?php echo ucfirst(str_replace('_', ' ', $skill['jenis_skill'])); ?>
+                                </div>
+                                <?php if (!empty($skill['deskripsi'])): ?>
+                                    <div class="skill-desc"><?php echo htmlspecialchars($skill['deskripsi']); ?></div>
+                                <?php endif; ?>
                             </div>
-                            <?php if (!empty($skill['deskripsi'])): ?>
-                                <div class="skill-desc"><?php echo htmlspecialchars($skill['deskripsi']); ?></div>
-                            <?php endif; ?>
-                        </div>
-                    <?php endforeach; ?>
+                        <?php endforeach; ?>
+                    </div>
                 <?php endif; ?>
+            </div>
+
+            <!-- Edit Skill Modal -->
+            <div id="editSkillModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Edit Skill</h3>
+                        <button class="close-modal" onclick="closeModal('editSkillModal')">&times;</button>
+                    </div>
+                    <form method="POST" id="editSkillForm">
+                        <input type="hidden" name="id" id="editSkillId">
+                        <div class="form-group">
+                            <label for="edit_nama_skill">Skill Name:</label>
+                            <input type="text" id="edit_nama_skill" name="nama_skill" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_jenis_skill">Skill Type:</label>
+                            <select id="edit_jenis_skill" name="jenis_skill" required>
+                                <option value="soft_skill">Soft Skill</option>
+                                <option value="hard_skill">Hard Skill</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_deskripsi">Description:</label>
+                            <textarea id="edit_deskripsi" name="deskripsi" rows="3"></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-cancel" onclick="closeModal('editSkillModal')">Cancel</button>
+                            <button type="submit" name="update_skill" class="btn btn-submit">Update Skill</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Delete Confirmation Modal -->
+            <div id="deleteSkillModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Confirm Deletion</h3>
+                        <button class="close-modal" onclick="closeModal('deleteSkillModal')">&times;</button>
+                    </div>
+                    <p>Are you sure you want to delete this skill? This action will also remove it from all employees.</p>
+                    <form method="POST" id="deleteSkillForm">
+                        <input type="hidden" name="id" id="deleteSkillId">
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-cancel" onclick="closeModal('deleteSkillModal')">Cancel</button>
+                            <button type="submit" name="delete_skill" class="btn btn-submit">Delete Skill</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
 
@@ -720,6 +953,33 @@ $filteredSkills = $selectedEmployee ? getEmployeeSkills($pdo, $selectedEmployee)
             <?php endif; ?>
         </div>
     </div>
+
+    <script>
+// Modal functions
+function openEditModal(id, name, type, description) {
+    document.getElementById('editSkillId').value = id;
+    document.getElementById('edit_nama_skill').value = name;
+    document.getElementById('edit_jenis_skill').value = type;
+    document.getElementById('edit_deskripsi').value = description;
+    document.getElementById('editSkillModal').style.display = 'flex';
+}
+
+function confirmDeleteSkill(id) {
+    document.getElementById('deleteSkillId').value = id;
+    document.getElementById('deleteSkillModal').style.display = 'flex';
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).style.display = 'none';
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    if (event.target.className === 'modal') {
+        event.target.style.display = 'none';
+    }
+}
+</script>
 </body>
 
 </html>

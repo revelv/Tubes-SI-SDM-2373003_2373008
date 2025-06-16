@@ -45,6 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error_message = "Error adding employee: " . $stmt->error;
         }
 
+        echo "<script>window.location.href='index.php';</script>";
         $stmt->close();
     } else {
         $error_message = "Please fill all required fields!";

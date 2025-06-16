@@ -1,10 +1,9 @@
 <?php
 
-
-// Handle approval/rejection
+require_once 'process.php';
 require_once 'auth.php';
 require 'admin_header.php';
-redirectIfNotAdmin();
+redirectIfNotLoggedIn();
 
 // Handle approval/rejection
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -93,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             error_log("Error in admin_approval.php: " . $e->getMessage());
         }
 
-        header("Location: admin_approval.php");
+         echo "<script>window.location.href='admin_approval.php';</script>";
         exit();
     }
 }
@@ -122,86 +121,209 @@ $applications = $result->fetch_all(MYSQLI_ASSOC);
 
 <head>
     <title>Styrk Industries</title>
+
     <style>
-        /* [Gaya CSS yang sama seperti sebelumnya] */
+        :root {
+            --primary-color: #3498db;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --light-gray: #f5f5f5;
+            --medium-gray: #e0e0e0;
+            --dark-gray: #333;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #444;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            margin-top: 100px;
+        }
+
         .container {
-            max-width: 1500px;
-            margin: 0 auto;
-            background-color: white;
-            border-radius: 0 0 3px 3px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            max-width: 1200px;
+            margin: 30px auto;
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+        }
+
+
+        .application {
+            background-color: var(--white);
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
             padding: 20px;
-            margin-top: 20px;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .application:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .application h3 {
+            margin: 0 0 10px 0;
+            color: var(--dark-gray);
+            font-size: 1.3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .app-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #666;
+            font-size: 0.85rem;
+            margin-bottom: 3px;
         }
 
         .action-form {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid #eee;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--medium-gray);
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--medium-gray);
+            border-radius: 4px;
+            min-height: 80px;
+            margin-bottom: 15px;
+            font-family: inherit;
+            resize: vertical;
         }
 
         .action-btn {
-            padding: 8px 15px;
+            padding: 10px 20px;
             margin-right: 10px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            font-weight: bold;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .review-btn {
-            background-color: #2196F3;
-            color: white;
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .review-btn:hover {
+            background-color: #2980b9;
         }
 
         .accept-btn {
-            background-color: #4CAF50;
-            color: white;
+            background-color: var(--success-color);
+            color: var(--white);
+        }
+
+        .accept-btn:hover {
+            background-color: #27ae60;
         }
 
         .reject-btn {
-            background-color: #F44336;
-            color: white;
+            background-color: var(--danger-color);
+            color: var(--white);
+        }
+
+        .reject-btn:hover {
+            background-color: #c0392b;
+        }
+
+        /* Status badges */
+        [class^="status-"] {
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 600;
         }
 
         .status-pending {
-            color: #FFA500;
+            color: var(--warning-color);
+            background-color: rgba(243, 156, 18, 0.1);
         }
 
         .status-reviewed {
-            color: #2196F3;
+            color: var(--primary-color);
+            background-color: rgba(52, 152, 219, 0.1);
         }
 
         .status-accepted {
-            color: #4CAF50;
+            color: var(--success-color);
+            background-color: rgba(46, 204, 113, 0.1);
         }
 
         .status-rejected {
-            color: #F44336;
+            color: var(--danger-color);
+            background-color: rgba(231, 76, 60, 0.1);
         }
 
+        /* Alert messages */
         .alert {
             padding: 15px;
-            margin-bottom: 20px;
-            border: 1px solid transparent;
+            margin-bottom: 25px;
             border-radius: 4px;
+            font-weight: 500;
         }
 
         .alert-success {
-            color: #3c763d;
-            background-color: #dff0d8;
-            border-color: #d6e9c6;
+            color: #155724;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
         }
 
         .alert-danger {
-            color: #a94442;
-            background-color: #f2dede;
-            border-color: #ebccd1;
+            color: #721c24;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
         }
 
-        .app-details {
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .app-details {
+                grid-template-columns: 1fr;
+            }
+
+            .action-btn {
+                width: 100%;
+                margin-bottom: 10px;
+                margin-right: 0;
+            }
         }
     </style>
+
 </head>
 
 <body>

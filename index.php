@@ -43,14 +43,14 @@ $departments = getDepartments($conn);
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
+            margin-top: 60px;
+            
             background-color: #f5f6f7;
             color: #333;
         }
 
         .container {
-            max-width: 1500px;
+        
             margin: 0 auto;
         }
 
@@ -174,60 +174,64 @@ $departments = getDepartments($conn);
 </head>
 
 <body>
+    <div class="container">
 
+        <div class="content">
+            <form method="GET" class="filter-form">
+                <select name="department">
+                    <option value="0">All Departments</option>
+                    <?php foreach ($departments as $id => $name): ?>
+                        <option value="<?php echo $id; ?>" <?php echo $department_filter == $id ? 'selected' : ''; ?>>
+                            <?php echo $name; ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+                <button type="submit">Filter</button>
+            </form>
 
-    <div class="content">
-        <form method="GET" class="filter-form">
-            <select name="department">
-                <option value="0">All Departments</option>
-                <?php foreach ($departments as $id => $name): ?>
-                    <option value="<?php echo $id; ?>" <?php echo $department_filter == $id ? 'selected' : ''; ?>>
-                        <?php echo $name; ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-            <button type="submit">Filter</button>
-        </form>
-
-        <table class="employee-table">
-            <thead>
-                <tr>
-                    <th>Profil Picture</th>
-                    <th>Name</th>
-                    <th>Position</th>
-                    <th>Department</th>
-                    <th>Email</th>
-
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($employees as $employee): ?>
+            <table class="employee-table">
+                <thead>
                     <tr>
-                        <td class="profil-gambar">
-                            <div class="image-container">
-                                <?php if (!empty($employee['image_path'])): ?>
-                                    <img src="<?php echo htmlspecialchars($employee['image_path']); ?>">
-                                <?php else: ?>
-                                    <div class="placeholder">No Photo</div>
-                                <?php endif; ?>
-                            </div>
-                        </td>
-                        <td><?php echo htmlspecialchars($employee['name']); ?></td>
-                        <td><?php echo htmlspecialchars($employee['position_title']); ?></td>
-                        <td><?php echo htmlspecialchars($employee['department_name']); ?></td>
-                        <td><?php echo htmlspecialchars($employee['email'] ?? '-'); ?></td>
+                        <th>Profil Picture</th>
+                        <th>Name</th>
+                        <th>Position</th>
+                        <th>Department</th>
+                        <th>Email</th>
 
-                        <td class="action-links">
-                            <a href="edit_employee.php?id=<?php echo $employee['id']; ?>">Edit</a>
-                            <a href="delete_employee.php?id=<?php echo $employee['id']; ?>" onclick="return confirm('Are you sure you want to delete this employee?')">Delete</a>
-                        </td>
+                        <th>Actions</th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div> <!-- Tutup div content -->
+                </thead>
+                <tbody>
+                    <?php foreach ($employees as $employee): ?>
+                        <tr>
+                            <td class="profil-gambar">
+                                <div class="image-container">
+                                    <?php if (!empty($employee['image_path'])): ?>
+                                        <img src="<?php echo htmlspecialchars($employee['image_path']); ?>">
+                                    <?php else: ?>
+                                        <div class="placeholder">No Photo</div>
+                                    <?php endif; ?>
+                                </div>
+                            </td>
+                            <td><?php echo htmlspecialchars($employee['name']); ?></td>
+                            <td><?php echo htmlspecialchars($employee['position_title']); ?></td>
+                            <td><?php echo htmlspecialchars($employee['department_name']); ?></td>
+                            <td><?php echo htmlspecialchars($employee['email'] ?? '-'); ?></td>
+
+                            <td class="action-links">
+                                <a href="edit_employee.php?id=<?php echo $employee['id']; ?>">Edit</a>
+                                <a href="delete_employee.php?id=<?php echo $employee['id']; ?>" onclick="return confirm('Are you sure you want to delete this employee?')">Delete</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div> <!-- Tutup div content -->
+
     </div> <!-- Tutup div container -->
+
+
+
 
     <!-- Tambahkan script auto logout -->
     <script>
