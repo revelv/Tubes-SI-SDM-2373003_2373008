@@ -145,7 +145,7 @@ redirectIfNotLoggedIn();
 <body>
     <!-- Replaced header with div.top-bar -->
     <div class="top-bar">
-        <h1>Time Off</h1>
+        <h1>Time Off Calendar</h1>
         <div class="search">
             <i class="fas fa-search"></i>
             <input type="text" placeholder="Search...">

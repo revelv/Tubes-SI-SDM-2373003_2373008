@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
 
     if (login($username, $password)) {
-        header("Location: " . (isAdmin() ? "index.php" : "employee_form.php"));
+        header("Location: " . (isAdmin() ? "dashboard.php" : "employee_form.php"));
         exit();
     } else {
         $error = "Username atau password salah";
@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         input[type="text"],
         input[type="password"] {
-            width: 100%;
+            width: 93%;
             padding: 0.75rem;
             border: 1px solid #ddd;
             border-radius: 4px;
@@ -125,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <body>
     <div class="login-container">
-        <h1>Employee Management System</h1>
+        <h1>Welcome To Styrk Industries!</h1>
 
         <?php if ($error): ?>
             <div class="error-message"><?php echo htmlspecialchars($error); ?></div>
@@ -143,7 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <button type="submit">Login</button>
         </form>
         <div class="register-link">
-            Belum punya akun? <a href="register_employee.php">Daftar sebagai calon karyawan</a>
+            Bukan Admin? <a href="register_employee.php">Daftar sebagai calon karyawan</a>
         </div>
 
         <style>

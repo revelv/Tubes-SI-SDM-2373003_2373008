@@ -314,7 +314,6 @@
                             <i class="fas fa-chevron-down"></i>
                         </a>
                         <div class="dropdown-menu">
-                            <a href="#" class="dropdown-item">Job Postings</a>
                             <a href="admin_approval.php" class="dropdown-item">Candidates</a>
                         </div>
                     </li>

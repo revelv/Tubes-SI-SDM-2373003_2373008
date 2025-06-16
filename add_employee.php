@@ -67,7 +67,7 @@ $job_positions = getJobPositions($conn);
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
-            padding: 20px;
+
             background-color: #f5f6f7;
             color: #333;
         }
@@ -75,6 +75,7 @@ $job_positions = getJobPositions($conn);
         .container {
             max-width: 1500px;
             margin: 0 auto;
+            padding: 20px;
         }
 
 
