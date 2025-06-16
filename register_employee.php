@@ -81,7 +81,7 @@ if ($result->num_rows > 0) {
 <html>
 
 <head>
-    <title>Job Application Form</title>
+    <title>Styrk Industries</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;

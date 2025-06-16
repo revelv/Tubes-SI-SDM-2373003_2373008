@@ -1,5 +1,8 @@
 <?php
 require_once 'process.php';
+require_once 'auth.php';
+require 'admin_header.php';
+redirectIfNotLoggedIn();
 
 if (!isset($_GET['id'])) {
     header("Location: index.php");
@@ -97,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Employee</title>
+    <title>Styrk Industries</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -108,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .container {
-            max-width: 600px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
@@ -165,12 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border-radius: 3px;
         }
 
-        .back-link {
-            display: inline-block;
-            margin-top: 15px;
-            color: #714B67;
-            text-decoration: none;
-        }
+
 
         .back-link:hover {
             text-decoration: underline;
@@ -181,12 +179,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             display: inline-block;
             margin-right: 8px;
         }
+        .judul{
+            background-color: white;
+            padding: 16px;
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <div class="header">
+        <div class="judul">
             Edit Employee
         </div>
         <div class="form-container">
@@ -245,7 +247,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <img id="imagePreview" src="#" alt="Preview" style="max-width: 150px; display: none; margin-top: 10px;">
                 </div>
                 <button type="submit">Update Employee</button>
-                <a href="index.php" class="back-link">← Back to Employee List</a>
             </form>
         </div>
     </div>

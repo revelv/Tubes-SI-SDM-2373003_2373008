@@ -61,7 +61,7 @@ $job_positions = getJobPositions($conn);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Employee</title>
+    <title>Styrk Industries</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -72,7 +72,7 @@ $job_positions = getJobPositions($conn);
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1500px;
             margin: 0 auto;
         }
 
@@ -138,7 +138,8 @@ $job_positions = getJobPositions($conn);
         .back-link:hover {
             text-decoration: underline;
         }
-        .judul{
+
+        .judul {
             padding: 10px;
         }
     </style>
@@ -163,15 +164,9 @@ $job_positions = getJobPositions($conn);
                     <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($name ?? ''); ?>" required>
                 </div>
                 <div class="form-group">
-                    <label for="position_id">Position</label>
-                    <select id="position_id" name="position_id" required>
-                        <option value="">Select Position</option>
-                        <?php foreach ($job_positions as $id => $name): ?>
-                            <option value="<?php echo $id; ?>" <?php echo ($position_id ?? 0) == $id ? 'selected' : ''; ?>>
-                                <?php echo htmlspecialchars($name); ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
+                    <label for="employee_image">Foto Karyawan</label>
+                    <input type="file" id="employee_image" name="employee_image" accept="image/*">
+                    <img id="imagePreview" src="#" alt="Preview" style="max-width: 150px; display: none; margin-top: 10px;">
                 </div>
                 <div class="form-group">
                     <label for="email">Email (optional)</label>
@@ -189,12 +184,17 @@ $job_positions = getJobPositions($conn);
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="employee_image">Foto Karyawan</label>
-                    <input type="file" id="employee_image" name="employee_image" accept="image/*">
-                    <img id="imagePreview" src="#" alt="Preview" style="max-width: 150px; display: none; margin-top: 10px;">
+                    <label for="position_id">Position</label>
+                    <select id="position_id" name="position_id" required>
+                        <option value="">Select Position</option>
+                        <?php foreach ($job_positions as $id => $name): ?>
+                            <option value="<?php echo $id; ?>" <?php echo ($position_id ?? 0) == $id ? 'selected' : ''; ?>>
+                                <?php echo htmlspecialchars($name); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
                 <button type="submit">Add Employee</button>
-                <a href="index.php" class="back-link">← Back to Employee List</a>
             </form>
         </div>
     </div>

@@ -131,7 +131,7 @@
             <div class="user-info">
                 <span style="color: white;">Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?></span>
                 <div>
-                    <a href="login.php" class="back-btn">&larr; Back</a>
+                    <a href="login.php" class="back-btn">Home</a>
                 </div>
                 <a href="add_employee.php" class="add-btn">Add Employee</a>
                 <a href="admin_approval.php" class="add-btn">Review Applications</a>

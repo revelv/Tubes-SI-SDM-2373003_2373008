@@ -121,9 +121,19 @@ $applications = $result->fetch_all(MYSQLI_ASSOC);
 <html>
 
 <head>
-    <title>Manajemen Rekrutmen</title>
+    <title>Styrk Industries</title>
     <style>
         /* [Gaya CSS yang sama seperti sebelumnya] */
+        .container {
+            max-width: 1500px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 0 0 3px 3px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
         .action-form {
             margin-top: 15px;
             padding-top: 15px;
@@ -187,6 +197,9 @@ $applications = $result->fetch_all(MYSQLI_ASSOC);
             color: #a94442;
             background-color: #f2dede;
             border-color: #ebccd1;
+        }
+
+        .app-details {
         }
     </style>
 </head>
