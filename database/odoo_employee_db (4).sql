@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jun 16, 2025 at 04:08 PM
+-- Generation Time: Jun 16, 2025 at 04:21 PM
 -- Server version: 8.4.3
 -- PHP Version: 8.3.16
 
@@ -109,40 +109,6 @@ INSERT INTO `employees` (`id`, `department_id`, `position_id`, `skills_id`, `nam
 -- --------------------------------------------------------
 
 --
--- Table structure for table `employee_salary`
---
-
-CREATE TABLE `employee_salary` (
-  `id` int NOT NULL,
-  `employee_id` int NOT NULL,
-  `basic_salary` decimal(12,2) NOT NULL,
-  `bank_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `bank_account_number` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `bank_account_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `tax_status` enum('TK0','TK1','TK2','TK3','K0','K1','K2','K3') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'TK0',
-  `npwp_number` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `effective_date` date NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `employee_salary_components`
---
-
-CREATE TABLE `employee_salary_components` (
-  `id` int NOT NULL,
-  `employee_id` int NOT NULL,
-  `component_id` int NOT NULL,
-  `amount` decimal(10,2) NOT NULL,
-  `effective_date` date NOT NULL,
-  `end_date` date DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `employee_skills`
 --
 
@@ -199,167 +165,6 @@ INSERT INTO `job_positions` (`position_id`, `department_id`, `title`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `payroll_attendance`
---
-
-CREATE TABLE `payroll_attendance` (
-  `id` int NOT NULL,
-  `employee_id` int NOT NULL,
-  `date` date NOT NULL,
-  `check_in` time DEFAULT NULL,
-  `check_out` time DEFAULT NULL,
-  `status` enum('present','absent','late','half_day','leave','holiday') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'present',
-  `overtime_hours` decimal(5,2) DEFAULT '0.00',
-  `notes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `payroll_components`
---
-
-CREATE TABLE `payroll_components` (
-  `id` int NOT NULL,
-  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `type` enum('earning','deduction','tax','benefit','reimbursement') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `is_taxable` tinyint(1) NOT NULL DEFAULT '0',
-  `is_recurring` tinyint(1) NOT NULL DEFAULT '1',
-  `calculation_type` enum('fixed','percentage','formula') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'fixed',
-  `calculation_value` decimal(10,2) DEFAULT NULL,
-  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `payroll_components`
---
-
-INSERT INTO `payroll_components` (`id`, `name`, `type`, `is_taxable`, `is_recurring`, `calculation_type`, `calculation_value`, `description`) VALUES
-(1, 'Basic Salary', 'earning', 1, 1, 'fixed', NULL, 'Basic monthly salary'),
-(2, 'Transport Allowance', 'earning', 1, 1, 'fixed', 1000000.00, 'Monthly transport allowance'),
-(3, 'Meal Allowance', 'earning', 1, 1, 'fixed', 800000.00, 'Monthly meal allowance'),
-(4, 'Position Allowance', 'earning', 1, 1, 'fixed', 1500000.00, 'Monthly position allowance'),
-(5, 'Overtime Pay', 'earning', 1, 0, 'fixed', NULL, 'Overtime payment'),
-(6, 'BPJS Kesehatan', 'deduction', 0, 1, 'percentage', 1.00, 'Employee BPJS Kesehatan contribution'),
-(7, 'BPJS Ketenagakerjaan', 'deduction', 0, 1, 'percentage', 2.00, 'Employee BPJS Ketenagakerjaan contribution'),
-(8, 'Income Tax (PPh 21)', 'tax', 0, 1, 'formula', NULL, 'Monthly income tax deduction'),
-(9, 'Loan Repayment', 'deduction', 0, 0, 'fixed', NULL, 'Employee loan repayment'),
-(10, 'Performance Bonus', 'earning', 1, 0, 'fixed', NULL, 'Performance-based bonus');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `payroll_jamsostek_config`
---
-
-CREATE TABLE `payroll_jamsostek_config` (
-  `id` int NOT NULL,
-  `effective_date` date NOT NULL,
-  `bpjs_kes_employee_rate` decimal(5,2) NOT NULL COMMENT 'Percentage',
-  `bpjs_kes_company_rate` decimal(5,2) NOT NULL COMMENT 'Percentage',
-  `bpjs_tk_employee_rate` decimal(5,2) NOT NULL COMMENT 'Percentage',
-  `bpjs_tk_company_rate` decimal(5,2) NOT NULL COMMENT 'Percentage',
-  `bpjs_kes_max_amount` decimal(12,2) DEFAULT NULL,
-  `bpjs_tk_max_amount` decimal(12,2) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `payroll_jamsostek_config`
---
-
-INSERT INTO `payroll_jamsostek_config` (`id`, `effective_date`, `bpjs_kes_employee_rate`, `bpjs_kes_company_rate`, `bpjs_tk_employee_rate`, `bpjs_tk_company_rate`, `bpjs_kes_max_amount`, `bpjs_tk_max_amount`) VALUES
-(1, '2025-01-01', 1.00, 4.00, 2.00, 3.70, 12000000.00, 8000000.00);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `payroll_periods`
---
-
-CREATE TABLE `payroll_periods` (
-  `id` int NOT NULL,
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `start_date` date NOT NULL,
-  `end_date` date NOT NULL,
-  `status` enum('draft','processing','completed','paid') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'draft',
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `created_by` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `payroll_records`
---
-
-CREATE TABLE `payroll_records` (
-  `id` int NOT NULL,
-  `period_id` int NOT NULL,
-  `employee_id` int NOT NULL,
-  `total_earnings` decimal(12,2) NOT NULL DEFAULT '0.00',
-  `total_deductions` decimal(12,2) NOT NULL DEFAULT '0.00',
-  `gross_pay` decimal(12,2) NOT NULL DEFAULT '0.00',
-  `tax_amount` decimal(12,2) NOT NULL DEFAULT '0.00',
-  `net_pay` decimal(12,2) NOT NULL DEFAULT '0.00',
-  `status` enum('draft','approved','paid','cancelled') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'draft',
-  `payment_date` date DEFAULT NULL,
-  `payment_method` enum('bank_transfer','cash','cheque') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `notes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `created_by` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `payroll_record_details`
---
-
-CREATE TABLE `payroll_record_details` (
-  `id` int NOT NULL,
-  `payroll_record_id` int NOT NULL,
-  `component_id` int NOT NULL,
-  `amount` decimal(10,2) NOT NULL,
-  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `payroll_tax_config`
---
-
-CREATE TABLE `payroll_tax_config` (
-  `id` int NOT NULL,
-  `tax_year` year NOT NULL,
-  `tax_status` enum('TK0','TK1','TK2','TK3','K0','K1','K2','K3') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `ptkp_amount` decimal(12,2) NOT NULL COMMENT 'Penghasilan Tidak Kena Pajak',
-  `tax_rate_1` decimal(5,2) NOT NULL COMMENT 'Rate for first bracket',
-  `tax_rate_2` decimal(5,2) NOT NULL COMMENT 'Rate for second bracket',
-  `tax_rate_3` decimal(5,2) NOT NULL COMMENT 'Rate for third bracket',
-  `tax_rate_4` decimal(5,2) NOT NULL COMMENT 'Rate for fourth bracket',
-  `bracket_1_max` decimal(12,2) DEFAULT NULL COMMENT 'Max amount for first bracket',
-  `bracket_2_max` decimal(12,2) DEFAULT NULL COMMENT 'Max amount for second bracket',
-  `bracket_3_max` decimal(12,2) DEFAULT NULL COMMENT 'Max amount for third bracket'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `payroll_tax_config`
---
-
-INSERT INTO `payroll_tax_config` (`id`, `tax_year`, `tax_status`, `ptkp_amount`, `tax_rate_1`, `tax_rate_2`, `tax_rate_3`, `tax_rate_4`, `bracket_1_max`, `bracket_2_max`, `bracket_3_max`) VALUES
-(1, '2025', 'TK0', 54000000.00, 5.00, 15.00, 25.00, 30.00, 60000000.00, 250000000.00, 500000000.00),
-(2, '2025', 'TK1', 58500000.00, 5.00, 15.00, 25.00, 30.00, 60000000.00, 250000000.00, 500000000.00),
-(3, '2025', 'TK2', 63000000.00, 5.00, 15.00, 25.00, 30.00, 60000000.00, 250000000.00, 500000000.00),
-(4, '2025', 'TK3', 67500000.00, 5.00, 15.00, 25.00, 30.00, 60000000.00, 250000000.00, 500000000.00),
-(5, '2025', 'K0', 58500000.00, 5.00, 15.00, 25.00, 30.00, 60000000.00, 250000000.00, 500000000.00),
-(6, '2025', 'K1', 63000000.00, 5.00, 15.00, 25.00, 30.00, 60000000.00, 250000000.00, 500000000.00),
-(7, '2025', 'K2', 67500000.00, 5.00, 15.00, 25.00, 30.00, 60000000.00, 250000000.00, 500000000.00),
-(8, '2025', 'K3', 72000000.00, 5.00, 15.00, 25.00, 30.00, 60000000.00, 250000000.00, 500000000.00);
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `recruitment`
 --
 
@@ -411,8 +216,6 @@ CREATE TABLE `skills` (
 --
 
 INSERT INTO `skills` (`id`, `nama_skill`, `jenis_skill`, `deskripsi`) VALUES
-(1, 'test', 'soft_skill', 'test01'),
-(2, 'test2', 'hard_skill', 'test02'),
 (3, 'Problem Solving', 'soft_skill', NULL),
 (4, 'Adaptability', 'soft_skill', NULL),
 (5, 'Communication', 'soft_skill', NULL),
@@ -476,7 +279,8 @@ INSERT INTO `skills` (`id`, `nama_skill`, `jenis_skill`, `deskripsi`) VALUES
 (63, 'Marketing Automation', 'hard_skill', NULL),
 (64, 'Branding', 'hard_skill', NULL),
 (65, 'Data Entry', 'hard_skill', NULL),
-(66, 'LMS Platforms', 'hard_skill', NULL);
+(66, 'LMS Platforms', 'hard_skill', NULL),
+(67, 'Hardworking', 'soft_skill', 'Can Work in any type');
 
 -- --------------------------------------------------------
 
@@ -518,21 +322,6 @@ ALTER TABLE `employees`
   ADD KEY `FK_position_id` (`position_id`);
 
 --
--- Indexes for table `employee_salary`
---
-ALTER TABLE `employee_salary`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `employee_id` (`employee_id`);
-
---
--- Indexes for table `employee_salary_components`
---
-ALTER TABLE `employee_salary_components`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `employee_id` (`employee_id`),
-  ADD KEY `component_id` (`component_id`);
-
---
 -- Indexes for table `employee_skills`
 --
 ALTER TABLE `employee_skills`
@@ -546,54 +335,6 @@ ALTER TABLE `employee_skills`
 ALTER TABLE `job_positions`
   ADD PRIMARY KEY (`position_id`),
   ADD KEY `job_positions_ibfk_1` (`department_id`);
-
---
--- Indexes for table `payroll_attendance`
---
-ALTER TABLE `payroll_attendance`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `employee_id` (`employee_id`);
-
---
--- Indexes for table `payroll_components`
---
-ALTER TABLE `payroll_components`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `payroll_jamsostek_config`
---
-ALTER TABLE `payroll_jamsostek_config`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `payroll_periods`
---
-ALTER TABLE `payroll_periods`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `payroll_records`
---
-ALTER TABLE `payroll_records`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `period_id` (`period_id`),
-  ADD KEY `employee_id` (`employee_id`);
-
---
--- Indexes for table `payroll_record_details`
---
-ALTER TABLE `payroll_record_details`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `payroll_record_id` (`payroll_record_id`),
-  ADD KEY `component_id` (`component_id`);
-
---
--- Indexes for table `payroll_tax_config`
---
-ALTER TABLE `payroll_tax_config`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `tax_year_status` (`tax_year`,`tax_status`);
 
 --
 -- Indexes for table `recruitment`
@@ -633,18 +374,6 @@ ALTER TABLE `employees`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
--- AUTO_INCREMENT for table `employee_salary`
---
-ALTER TABLE `employee_salary`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `employee_salary_components`
---
-ALTER TABLE `employee_salary_components`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `employee_skills`
 --
 ALTER TABLE `employee_skills`
@@ -657,48 +386,6 @@ ALTER TABLE `job_positions`
   MODIFY `position_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
--- AUTO_INCREMENT for table `payroll_attendance`
---
-ALTER TABLE `payroll_attendance`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `payroll_components`
---
-ALTER TABLE `payroll_components`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
-
---
--- AUTO_INCREMENT for table `payroll_jamsostek_config`
---
-ALTER TABLE `payroll_jamsostek_config`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `payroll_periods`
---
-ALTER TABLE `payroll_periods`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `payroll_records`
---
-ALTER TABLE `payroll_records`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `payroll_record_details`
---
-ALTER TABLE `payroll_record_details`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `payroll_tax_config`
---
-ALTER TABLE `payroll_tax_config`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-
---
 -- AUTO_INCREMENT for table `recruitment`
 --
 ALTER TABLE `recruitment`
@@ -708,7 +395,7 @@ ALTER TABLE `recruitment`
 -- AUTO_INCREMENT for table `skills`
 --
 ALTER TABLE `skills`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -728,19 +415,6 @@ ALTER TABLE `employees`
   ADD CONSTRAINT `FK_position_id` FOREIGN KEY (`position_id`) REFERENCES `job_positions` (`position_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
--- Constraints for table `employee_salary`
---
-ALTER TABLE `employee_salary`
-  ADD CONSTRAINT `employee_salary_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `employee_salary_components`
---
-ALTER TABLE `employee_salary_components`
-  ADD CONSTRAINT `employee_salary_components_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `employee_salary_components_ibfk_2` FOREIGN KEY (`component_id`) REFERENCES `payroll_components` (`id`) ON DELETE CASCADE;
-
---
 -- Constraints for table `employee_skills`
 --
 ALTER TABLE `employee_skills`
@@ -752,26 +426,6 @@ ALTER TABLE `employee_skills`
 --
 ALTER TABLE `job_positions`
   ADD CONSTRAINT `job_positions_ibfk_1` FOREIGN KEY (`department_id`) REFERENCES `departments` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
-
---
--- Constraints for table `payroll_attendance`
---
-ALTER TABLE `payroll_attendance`
-  ADD CONSTRAINT `payroll_attendance_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `payroll_records`
---
-ALTER TABLE `payroll_records`
-  ADD CONSTRAINT `payroll_records_ibfk_1` FOREIGN KEY (`period_id`) REFERENCES `payroll_periods` (`id`),
-  ADD CONSTRAINT `payroll_records_ibfk_2` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `payroll_record_details`
---
-ALTER TABLE `payroll_record_details`
-  ADD CONSTRAINT `payroll_record_details_ibfk_1` FOREIGN KEY (`payroll_record_id`) REFERENCES `payroll_records` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `payroll_record_details_ibfk_2` FOREIGN KEY (`component_id`) REFERENCES `payroll_components` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `recruitment`
