@@ -555,7 +555,7 @@ $editingSkill = isset($_GET['action']) && $_GET['action'] === 'edit_skill' && is
 
 <body>
     <div class="container">
-        <h1 class="ireng">Employee Skills Management</h1>
+        <h1 class="ireng">Skills</h1>
 
         <?php if (isset($_SESSION['success_message'])): ?>
             <div class="alert alert-success">
