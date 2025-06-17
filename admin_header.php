@@ -292,7 +292,6 @@
                         </a>
                         <div class="dropdown-menu">
                             <a href="appraisals.php" class="dropdown-item">Appraisals Employee</a>
-                            <a href="#" class="dropdown-item">Goals</a>
                         </div>
                     </li>
 
