@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jun 16, 2025 at 04:21 PM
+-- Generation Time: Jun 17, 2025 at 02:00 AM
 -- Server version: 8.4.3
 -- PHP Version: 8.3.16
 
@@ -72,7 +72,7 @@ INSERT INTO `employees` (`id`, `department_id`, `position_id`, `skills_id`, `nam
 (1, 6, 8, 0, 'Balmond Saputra', 'mon_putra15@gmail.com', 'uploads/0e0e084aef8e3730d47cc0d8a3fa4ad7.jpg', 0, '2025-06-15 04:23:50'),
 (2, 3, 6, 0, 'Guntur Surapati', 'guntursurapati@gmail.com', 'uploads/cbb208d8d98e4d67676d6811b6102ed8.jpg', 0, '2025-06-15 04:23:50'),
 (4, 4, 7, 0, 'Rivaldi Tazz', 'bobitan@gmail.exe', 'uploads/6954edfcc349810836e69df826ca180f.jpg', 0, '2025-06-15 04:23:50'),
-(5, 5, 9, 0, 'TONY STARKS', 'tonystark@stark.com', 'uploads/5acbc030b37130fe7fc9480add14119b.png', 0, '2025-06-15 04:23:50'),
+(5, 5, 16, 0, 'TONY STARKS', 'tonystark@stark.com', 'uploads/5acbc030b37130fe7fc9480add14119b.png', 0, '2025-06-15 04:23:50'),
 (6, 7, 11, 0, 'かのじょ', 'kanokari@gmail.com', 'uploads/7291e1d0ec782295cf870321af2c7aff.png', 0, '2025-06-15 04:23:50'),
 (7, 7, 10, 0, 'ベレウェブ', 'brew-brew-patapim@gmail.com', 'uploads/4bf5df48eb02b8aa5fb8ec7f05799eea.png', 0, '2025-06-15 04:23:50'),
 (8, 6, 8, 0, '英雄緑色', 'eishi.h173@gmail.com', 'uploads/b515f50b0db2902eed12b7d8a69d3cca.jpg', 0, '2025-06-15 04:23:50'),
@@ -83,7 +83,7 @@ INSERT INTO `employees` (`id`, `department_id`, `position_id`, `skills_id`, `nam
 (17, 6, 8, 0, 'Asep Balon', 'balon_meledak1748@gmail.com', 'uploads/066d7046e4a1eda50c71724aed3a48e5.jpg', 0, '2025-06-15 04:23:50'),
 (24, 2, 3, 0, 'Kiboy Monteg', 'yebtolonginyeb@gmail.com', 'uploads/ce0fcfe6a9ea7c4a470adc3642b2facb.jpg', 1, '2025-06-15 11:07:04'),
 (25, 1, 1, 0, 'samidahlah', 'tonyck@gmail.com', 'uploads/c48263ed8d227d0e9eddae5563f9b65d.jpg', NULL, '2025-06-15 11:12:32'),
-(27, 6, 9, 0, 'Coach Adi', 'yebtolonginyeb@gmail.com', 'uploads/e6d7aaa36c68502afe056bab0441cabe.png', 1, '2025-06-15 11:16:37'),
+(27, 6, 8, 0, 'Coach Adi', 'yebtolonginyeb@gmail.com', 'uploads/e6d7aaa36c68502afe056bab0441cabe.png', 1, '2025-06-15 11:16:37'),
 (28, 4, 7, 0, 'CaptWolfGt', 'rayganteng@gmail.com', 'uploads/0cd4f155be387b3e63d6129226778fce.jpg', 1, '2025-06-15 11:26:00'),
 (30, 3, 5, 0, 'Asep kardi', 'balon_asep1748@gmail.com', 'uploads/2ddfa18c68672bbb7f6c394144ae7afc.jpg', 1, '2025-06-15 13:19:34'),
 (31, 7, 11, 0, 'Kairi Ygnacio Rayosdelsol', 'kairirandosol@gmail.com', 'uploads/c6fe90bca962bb9fe625ac6262c98a16.png', 1, '2025-06-15 13:22:53'),
@@ -102,7 +102,7 @@ INSERT INTO `employees` (`id`, `department_id`, `position_id`, `skills_id`, `nam
 (45, 8, 14, 0, 'Gregorius Subianto', 'mcgrebeg@yahoo.co.id', 'uploads/d9becea3999eb12807f121a79ae6ff95.jpg', NULL, '2025-06-16 07:14:11'),
 (46, 8, 12, 0, 'Ken Surono', 'kensurono111@gmail.com', 'uploads/2ee294be5a6d8d2bade4b088cdb5fe24.gif', NULL, '2025-06-16 07:15:34'),
 (47, 6, 8, 0, 'スティーブン・フェリックス', 'sutigbelip@gmail.com', 'uploads/e46e9f4f66239a31b192536d5b4328ca.jpg', NULL, '2025-06-16 07:17:42'),
-(48, 6, 6, 0, '死柄木弔', 'tomura.shiragaki@177013.comc', 'uploads/d58befa456b25e19961c78fe9c376045.png', NULL, '2025-06-16 07:18:13'),
+(48, 6, 9, 0, '死柄木弔', 'tomura.shiragaki@177013.comc', 'uploads/d58befa456b25e19961c78fe9c376045.png', NULL, '2025-06-16 07:18:13'),
 (49, 3, 5, 0, '宮下玲奈', 'renakorusu@gmail.com', 'uploads/8048c9a9df08395a7cae5d6bd620220c.jpg', NULL, '2025-06-16 07:23:14'),
 (50, 7, 11, 0, ' 深田えいみ', 'adakufimie@kakao.com', 'uploads/77c4f9cb96607f1b7088a5dfb052e0fa.jpg', NULL, '2025-06-16 07:26:08');
 
@@ -160,7 +160,8 @@ INSERT INTO `job_positions` (`position_id`, `department_id`, `title`) VALUES
 (12, 8, 'IT Staff'),
 (13, 8, 'IT Manager'),
 (14, 8, 'System Engineer'),
-(15, 8, 'Programmer');
+(15, 8, 'Programmer'),
+(16, 5, 'Operational Manager');
 
 -- --------------------------------------------------------
 
@@ -383,7 +384,7 @@ ALTER TABLE `employee_skills`
 -- AUTO_INCREMENT for table `job_positions`
 --
 ALTER TABLE `job_positions`
-  MODIFY `position_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `position_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `recruitment`

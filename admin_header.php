@@ -267,6 +267,7 @@
                             <a href="add_employee.php" class="dropdown-item">Add New</a>
                             <a href="departements.php" class="dropdown-item">Departments</a>
                             <a href="skill_types.php" class="dropdown-item">Skill Types</a>
+                            <a href="structure.php" class="dropdown-item">Organizational Structure</a>
                         </div>
                     </li>
 
