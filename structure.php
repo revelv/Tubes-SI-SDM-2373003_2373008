@@ -1,7 +1,9 @@
 <?php
-// struktur.php - Organizational Chart with Operational Manager at Top
+require_once 'process.php';
+require_once 'auth.php';
+require 'admin_header.php';
+redirectIfNotLoggedIn();
 
-// Database connection
 $host = 'localhost';
 $dbname = 'odoo_employee_db';
 $username = 'root';
@@ -84,12 +86,11 @@ unset($leader);
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
             background-color: #f8f9fa;
             overflow-x: auto;
+            margin-top: 80px;
         }
-        h1 {
+        .ireng {
             text-align: center;
             color: #2c3e50;
             margin-bottom: 30px;
@@ -290,7 +291,7 @@ unset($leader);
     </style>
 </head>
 <body>
-    <h1>Organizational Chart</h1>
+    <h1 class="ireng">Organizational Chart</h1>
     
     <div class="org-container">
         <?php if (!empty($operationalManager)): ?>
